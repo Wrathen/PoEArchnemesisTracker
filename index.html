@@ -1,0 +1,83 @@
+<html>
+
+<style>
+    body {
+        background-color: black;
+        color: magenta;
+        text-align: center;
+    }
+
+    h1 {
+        color: chartreuse;
+    }
+
+    button {
+        margin-left: 10px;
+    }
+</style>
+
+<body>
+    <button onclick="localStorage.data = ''; location.reload();" style="margin-bottom: 5px; background-color:aqua; color:green">Reset Data</button><br>
+    Mirror Image: Echoist - Soul Conduit<br>
+    Treant: Toxic - Sentinel - Steel-Infused<br>
+    Assasin: Deadeye - Vampiric<br>
+    Rejuvenating: Gargantuan - Vampiric<br>
+    <h1>Fragments</h1>
+    Echoist:
+    <b id=echoistNumber>0</b> <button onclick="AddFragment(fragments.Echoist)">Add</button>
+    <button onclick="RemoveFragment(fragments.Echoist)">Remove</button> <br>
+    Soul Conduit: <b id=soulConduitNumber>0</b> <button onclick="AddFragment(fragments.SoulConduit)">Add</button>
+    <button onclick="RemoveFragment(fragments.SoulConduit)">Remove</button> <br>
+    Toxic: <b id=toxicNumber>0</b> <button onclick="AddFragment(fragments.Toxic)">Add</button>
+    <button onclick="RemoveFragment(fragments.Toxic)">Remove</button> <br>
+    Sentinel: <b id=sentinelNumber>0</b> <button onclick="AddFragment(fragments.Sentinel)">Add</button>
+    <button onclick="RemoveFragment(fragments.Sentinel)">Remove</button> <br>
+    SteelInfused: <b id=steelInfusedNumber>0</b> <button onclick="AddFragment(fragments.SteelInfused)">Add</button>
+    <button onclick="RemoveFragment(fragments.SteelInfused)">Remove</button> <br>
+    Deadeye: <b id=deadeyeNumber>0</b> <button onclick="AddFragment(fragments.Deadeye)">Add</button>
+    <button onclick="RemoveFragment(fragments.Deadeye)">Remove</button> <br>
+    Gargantuan: <b id=gargantuanNumber>0</b> <button onclick="AddFragment(fragments.Gargantuan)">Add</button>
+    <button onclick="RemoveFragment(fragments.Gargantuan)">Remove</button> <br>
+    Vampiric: <b id=vampiricNumber>0</b> <button onclick="AddFragment(fragments.Vampiric)">Add</button>
+    <button onclick="RemoveFragment(fragments.Vampiric)">Remove</button> <br>
+    <h1>Big Fragments</h1>
+    Mirror Image: <b id=mirrorImageNumber>0</b> <button onclick="MergeInto(bigFragments.MirrorImage)">Merge</button>
+    <button onclick="RemoveFragment(bigFragments.MirrorImage)">Remove</button> <br>
+    Treant: <b id=treantNumber>0</b> <button onclick="MergeInto(bigFragments.Treant)">Merge</button>
+    <button onclick="RemoveFragment(bigFragments.Treant)">Remove</button> <br>
+    Assasin: <b id=assasinNumber>0</b> <button onclick="MergeInto(bigFragments.Assasin)">Merge</button>
+    <button onclick="RemoveFragment(bigFragments.Assasin)">Remove</button> <br>
+    Rejuvenating: <b id=rejuvenatingNumber>0</b> <button onclick="MergeInto(bigFragments.Rejuvenating)">Merge</button>
+    <button onclick="RemoveFragment(bigFragments.Rejuvenating)">Remove</button> <br>
+
+    <script>
+        fragments = {
+            Echoist: { element: document.getElementById("echoistNumber"), count: 0 },
+            SoulConduit: { element: document.getElementById("soulConduitNumber"), count: 0 },
+            Toxic: { element: document.getElementById("toxicNumber"), count: 0 },
+            Sentinel: { element: document.getElementById("sentinelNumber"), count: 0 },
+            SteelInfused: { element: document.getElementById("steelInfusedNumber"), count: 0 },
+            Deadeye: { element: document.getElementById("deadeyeNumber"), count: 0 },
+            Vampiric: { element: document.getElementById("vampiricNumber"), count: 0 },
+            Gargantuan: { element: document.getElementById("gargantuanNumber"), count: 0 }
+        }
+        bigFragments = {
+            MirrorImage: { element: document.getElementById("mirrorImageNumber"), count: 0, requires: [fragments.Echoist, fragments.SoulConduit] },
+            Treant: { element: document.getElementById("treantNumber"), count: 0, requires: [fragments.Toxic, fragments.Sentinel, fragments.SteelInfused] },
+            Assasin: { element: document.getElementById("assasinNumber"), count: 0, requires: [fragments.Deadeye, fragments.Vampiric] },
+            Rejuvenating: { element: document.getElementById("rejuvenatingNumber"), count: 0, requires: [fragments.Gargantuan, fragments.Vampiric] }
+        }
+
+        LoadCookies();
+        UpdateAllFragments();
+
+        function MergeInto(bigFragment) { bigFragment.requires.forEach(element => { RemoveFragment(element); }); AddFragment(bigFragment); }
+        function AddFragment(fragmentType) { fragmentType.element.innerHTML = ++fragmentType.count; SaveCookies(); }
+        function RemoveFragment(fragmentType) { fragmentType.element.innerHTML = --fragmentType.count; SaveCookies(); }
+        function SaveCookies() { data = ""; for (let element in fragments) data += fragments[element].count + "|"; for (let element in bigFragments) data += bigFragments[element].count + "|"; localStorage.data = data; }
+        function LoadCookies() { if (!localStorage.data) { localStorage.data = ""; return;}; data = localStorage.data.split("|"); let index = 0; for (let element in fragments) fragments[element].count = data[index++]; for (let element in bigFragments) bigFragments[element].count = data[index++]; }
+        function UpdateAllFragments() { for (let i in fragments) fragments[i].element.innerHTML = fragments[i].count; for (let i in bigFragments) bigFragments[i].element.innerHTML = bigFragments[i].count;}
+    </script>
+</body>
+
+</html>
